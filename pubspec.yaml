@@ -5,12 +5,12 @@ author: Ayush Bherwani <ayush.bherwani1998@gmail.com>
 homepage: https://github.com/AyushBherwani1998/here_maps_webservice
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  http: ^0.12.0+4
+  http: ^0.13.1
 
 dev_dependencies:
   flutter_test:
