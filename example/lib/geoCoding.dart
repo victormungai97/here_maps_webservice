@@ -41,7 +41,7 @@ class _GeoCodingState extends State<GeoCoding> {
                   : Text("No Results"),
             ),
           ),
-          FlatButton(
+          TextButton(
             onPressed: () {
               if (_searchController.text.isNotEmpty) {
                 getGeoCode();

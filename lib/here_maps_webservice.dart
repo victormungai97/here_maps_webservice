@@ -1,7 +1,6 @@
 library here_maps;
 
 import 'dart:convert';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 /// [apiKey] can be obtained from the REST section
@@ -10,21 +9,18 @@ import 'package:http/http.dart' as http;
 class HereMaps {
   final String apiKey;
 
-  HereMaps({@required this.apiKey})
-      : assert(apiKey != null, "apiKey can't be null");
+  HereMaps({required this.apiKey});
 
   /// exploreNearbyPlaces returns a List of places near the center of the [lat] and [lon] given
   /// [offset] can be given to set the number of results returned by exploreNearbyPlaces
   /// By default the value of [offset] is set to 20
   /// [nextUrl] can be given to fetch the next set of results
 
-  Future<Map<String, dynamic>> exploreNearbyPlaces(
-      {@required double lat,
-      @required double lon,
+  Future<Map<String, dynamic>?> exploreNearbyPlaces(
+      {required double lat,
+      required double lon,
       int offset = 20,
-      String nextUrl}) async {
-    assert(lat != null, "lat can't be null");
-    assert(lon != null, "lon can't be null");
+      String? nextUrl}) async {
     assert(offset >= 0, "offset can't be negative");
 
     var _headers = {
@@ -48,14 +44,12 @@ class HereMaps {
   /// By default the value of [offset] is set to 20
   /// [nextUrl] can be given to fetch the next set of results
 
-  Future<Map<String, dynamic>> explorePopularPlaces(
-      {@required double lat,
-      @required double lon,
-      Categories category,
+  Future<Map<String, dynamic>?> explorePopularPlaces(
+      {required double lat,
+      required double lon,
+      Categories? category,
       int offset = 20,
-      String nextUrl}) async {
-    assert(lat != null, "lat can't be null");
-    assert(lon != null, "lon can't be null");
+      String? nextUrl}) async {
     assert(offset >= 0, "offset can't be negative");
 
     Map<String, String> categoryMap = {
@@ -66,7 +60,7 @@ class HereMaps {
       "petrolStation": "petrol-station"
     };
 
-    String cat;
+    String? cat;
     if (category != null) {
       cat = category.toString().substring(category.toString().indexOf('.') + 1);
     }
@@ -74,7 +68,7 @@ class HereMaps {
       "Accept": "application/json",
     };
 
-    Map<String, String> body = Map();
+    Map<String, String?> body = Map();
     body["at"] = '$lat,$lon';
     if (cat != null)
       body['cat'] = categoryMap.containsKey(cat) ? categoryMap[cat] : cat;
@@ -92,10 +86,10 @@ class HereMaps {
   /// [maxResults] can be given to restrict the suggestions based on [query]
   /// The valid value of [maxResults] is between 1 to 10
 
-  Future<Map<String, dynamic>> geoCodingAutoComplete(
-      {@required String query, int maxResults = 1}) async {
-    assert(query != null, "query can't be null");
-    assert(maxResults >= 1 && maxResults <= 10, "maxResults must be between 1 and 10");
+  Future<Map<String, dynamic>?> geoCodingAutoComplete(
+      {required String query, int maxResults = 1}) async {
+    assert(maxResults >= 1 && maxResults <= 10,
+        "maxResults must be between 1 and 10");
     var _headers = {
       "Accept": "application/json",
     };
@@ -112,9 +106,7 @@ class HereMaps {
   /// geoCode can be used to retrieves the latitude, longitude and complete address details
   /// based on the [searchText] provided
 
-  Future<Map<String, dynamic>> geoCode({@required String searchText}) async {
-    assert(searchText != null, "searchText can't be null");
-
+  Future<Map<String, dynamic>?> geoCode({required String searchText}) async {
     var _headers = {
       "Accept": "application/json",
     };
@@ -137,13 +129,11 @@ class HereMaps {
   /// [ReverseGeoCodeModes.trackPosition] Retrieve street and address information based on a position and bearing
   /// [ReverseGeoCodeModes.retrieveAll] Search for streets, administrative areas and landmarks. This mode aggregates the results of the three different modes in one call
 
-  Future<Map<String, dynamic>> reverseGeoCode(
-      {@required double lat,
-      @required double lon,
+  Future<Map<String, dynamic>?> reverseGeoCode(
+      {required double lat,
+      required double lon,
       ReverseGeoCodeModes mode = ReverseGeoCodeModes.retrieveAddresses,
       int maxResults = 1}) async {
-    assert(lat != null, "lat can't be null");
-    assert(lon != null, "lon can't be null");
     assert(maxResults <= 1, "maxResults should be greater than 1");
     var _headers = {
       "Accept": "application/json",
@@ -181,7 +171,8 @@ enum ReverseGeoCodeModes {
   trackPosition
 }
 
-Future<Map<String, dynamic>> makeApiCall(dynamic uri, Map headers) async {
-  http.Response response = await http.get(uri, headers: headers);
+Future<Map<String, dynamic>?> makeApiCall(dynamic uri, Map headers) async {
+  http.Response response =
+      await http.get(uri, headers: headers as Map<String, String>?);
   return json.decode(response.body);
 }

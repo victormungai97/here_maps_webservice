@@ -45,35 +45,35 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          FlatButton(
+          TextButton(
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => ExploreNearbyPlaces()));
             },
             child: getContainer("Nearby Places"),
           ),
-          FlatButton(
+          TextButton(
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => ExplorePopularPlaces()));
             },
             child: getContainer("Popular Places"),
           ),
-          FlatButton(
+          TextButton(
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => GeoCodingAutoComplete()));
             },
             child: getContainer("GeoCoding Auto Complete"),
           ),
-          FlatButton(
+          TextButton(
             onPressed: () {
               Navigator.of(context)
                   .push(MaterialPageRoute(builder: (context) => GeoCoding()));
             },
             child: getContainer("GeoCoding"),
           ),
-          FlatButton(
+          TextButton(
             onPressed: () {
               Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => ReverseGeoCoding()));
