@@ -373,7 +373,7 @@ class HereMaps {
   ///
   /// [apiKey] can be obtained from the REST section given under the Freemium Projects.
   ///
-  /// [width], [height], [zoom] and [format] can be left out and defaults are used.
+  /// [width], [height] and [zoom] can be left out and defaults are used.
   ///
   /// Additional parameters can be passed accordingly.
   ///

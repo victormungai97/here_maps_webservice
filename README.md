@@ -9,7 +9,7 @@
 
 ## About 
 
-`here_maps_webservice` provides Here Maps Web Services API wrapper that serve different purposes from search, to geocoding.
+`here_maps_webservice` provides Here Maps Web Services API wrapper that serve different purposes from search, to geocoding, to map image.
 
 ## Usage
 
@@ -28,6 +28,7 @@ Run `flutter pub get` in the terminal and import `import 'package:here_maps_webs
 - [Geocoding Autocomplete](https://developer.here.com/documentation/geocoder-autocomplete/dev_guide/topics/quick-start-get-suggestions.html)
 - [Explore Nearby Places](https://developer.here.com/documentation/examples/rest/places/explore-nearby-places)
 - [Explore Popular Places](https://developer.here.com/documentation/examples/rest/places/explore-popular-places)
+- [HERE Map Image](https://developer.here.com/documentation/map-image/dev_guide/topics/what-is.html)
 
 
 ## Generate API KEY
@@ -166,6 +167,47 @@ Under the REST section of your project, click on Create API key.
           Address address = response?.first?.address;
           setState(() {
             this._result = address?.label ?? "";
+          });
+        }
+        if (response is Error) {
+          setState(() {
+            this._result = response.title + ": " + response.action;
+          });
+        }
+      });
+
+```
+
+##### Request static map image
+```DART
+    import 'dart:typed_data';
+
+    import 'package:here_maps_webservice/here_maps.dart';
+    import 'package:location/location.dart' as l; 
+    import 'package:flutter/services.dart';
+    
+    var currentLocation;
+    var location = new l.Location();
+    dynamic _result;
+
+    try {
+      currentLocation = await location.getLocation();
+      }on PlatformException catch (error) {
+      if (error.code == 'PERMISSION_DENIED') {
+        print("Permission Dennied");
+      }
+    }
+    
+     HereMaps.generateMapImage(
+        apiKey: "your apiKey",
+        latitude: currentLocation?.latitude ?? 0.0,
+        longitude: currentLocation?.longitude ?? 0.0,
+        queryParameters: {"z": "16", "t": "14"},
+      ).then((response) {
+        print(response);
+        if (response is Uint8List) {
+          setState(() {
+            this._result = response;
           });
         }
         if (response is Error) {
