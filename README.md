@@ -114,15 +114,27 @@ Under the REST section of your project, click on Create API key.
 ```DART
     import 'package:here_maps_webservice/here_maps.dart';
     
-    Map<String, dynamic> latLon = Map();
+    dynamic _result;
     
-    HereMaps(apiKey: "your apiKey")
-        .geoCode(searchText: _searchController.text)
-        .then((response) {
-      setState(() {
-        latLon = response['Response']['View'][0]['Result'][0]['Location']
-            ['DisplayPosition'];
-      });
+    HereMaps.geoCode(
+      apiKey: "your apiKey",
+      unstructuredQuery: _searchController?.text ?? "",
+    ).then((response) {
+      print(response);
+      if (response is List<Geocode>) {
+        Geocode geocode = response?.first ?? null;
+        Address address = geocode?.address;
+        GeoPosition geoposition = geocode?.position ?? null;
+        setState(() {
+          this._result =
+              "Title: ${geocode?.title ?? 'Missing'}\nCoordinates: ${geoposition?.latitude ?? 'null'}, ${geoposition?.longitude ?? 'null'}\nAddress: ${address?.label ?? 'Missing'}";
+        });
+      }
+      if (response is Error) {
+        setState(() {
+          this._result = response.title + ": " + response.action;
+        });
+      }
     });
 ```
 
@@ -134,6 +146,7 @@ Under the REST section of your project, click on Create API key.
     
     var currentLocation;
     var location = new l.Location();
+    dynamic _result;
 
     try {
       currentLocation = await location.getLocation();
@@ -143,8 +156,24 @@ Under the REST section of your project, click on Create API key.
       }
     }
     
-    Map<String,dynamic> response = HereMaps(apiKey: "your apiKey")
-      .reverseGeoCode(lat: currentLocation.latitude, lon: currentLocation.longitude)
+    HereMaps.reverseGeoCode(
+              apiKey: "your apiKey",
+              latitude: currentLocation.latitude,
+              longitude: currentLocation.longitude)
+          .then((response) {
+        print(response);
+        if (response is List<ReverseGeocode>) {
+          Address address = response?.first?.address;
+          setState(() {
+            this._result = address?.label ?? "";
+          });
+        }
+        if (response is Error) {
+          setState(() {
+            this._result = response.title + ": " + response.action;
+          });
+        }
+      });
 
 ```
 
