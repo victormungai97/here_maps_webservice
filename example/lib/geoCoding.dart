@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:here_maps_webservice/here_maps_webservice.dart';
 
+import 'utils.dart';
+
 class GeoCoding extends StatefulWidget {
   @override
   _GeoCodingState createState() => _GeoCodingState();
 }
 
 class _GeoCodingState extends State<GeoCoding> {
-  Map<String, dynamic> latLon = Map();
+  dynamic _result;
   TextEditingController _searchController = TextEditingController();
 
   @override
@@ -36,9 +38,13 @@ class _GeoCodingState extends State<GeoCoding> {
           Expanded(
             child: Container(
               alignment: Alignment.center,
-              child: latLon.isNotEmpty
-                  ? Text("${latLon['Latitude']},${latLon['Longitude']}")
-                  : Text("No Results"),
+              child: _result == null
+                  ? Text("Waiting for results...")
+                  : _result is String
+                      ? Text(_result)
+                      : _result is GeoPosition
+                          ? Text("${_result.latitude},${_result.longitude}")
+                          : Text("No Results"),
             ),
           ),
           TextButton(
@@ -98,15 +104,28 @@ class _GeoCodingState extends State<GeoCoding> {
   }
 
   void getGeoCode() {
-    HereMaps(apiKey: "your apiKey")
-        .geoCode(searchText: _searchController.text)
-        .then((response) {
-      print(response['Response']['View'][0]['Result'][0]['Location']
-          ['DisplayPosition']);
-      setState(() {
-        latLon = response['Response']['View'][0]['Result'][0]['Location']
-            ['DisplayPosition'];
-      });
+    HereMaps.geoCode(
+      apiKey: API_KEY,
+      unstructuredQuery: _searchController?.text ?? "",
+    ).then((response) {
+      print(response);
+      if (response is List<Geocode>) {
+        Geocode geocode = response?.first ?? null;
+        Address address = geocode?.address;
+        if (address == null) {
+          showToast("No address found at given coordinated");
+        }
+        GeoPosition geoposition = geocode?.position ?? null;
+        setState(() {
+          this._result =
+              "Title: ${geocode?.title ?? 'Missing'}\nCoordinates: ${geoposition?.latitude ?? 'null'}, ${geoposition?.longitude ?? 'null'}\nAddress: ${address?.label ?? 'Missing'}";
+        });
+      }
+      if (response is Error) {
+        setState(() {
+          this._result = response.title + ": " + response.action;
+        });
+      }
     });
   }
 }

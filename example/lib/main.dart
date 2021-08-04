@@ -1,6 +1,7 @@
 import 'package:example/exploreNearByPlaces.dart';
 import 'package:example/explorePopularPLaces.dart';
 import 'package:example/geoCoding.dart';
+import 'package:example/hereMapImage.dart';
 import 'package:example/geoCodingAutoComplete.dart';
 import 'package:example/reverseGeoCoding.dart';
 import 'package:flutter/material.dart';
@@ -79,7 +80,14 @@ class _MyHomePageState extends State<MyHomePage> {
                   MaterialPageRoute(builder: (context) => ReverseGeoCoding()));
             },
             child: getContainer("Reverse GeoCoding"),
-          )
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => HereMapImage()));
+            },
+            child: getContainer("HERE Map Image"),
+          ),
         ],
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );

@@ -22,7 +22,7 @@ Add `here_maps_webservice`as a dependency in your pubspec.yaml
 ```
 Run `flutter pub get` in the terminal and import `import 'package:here_maps_webservice/here_maps.dart'`
 
-## Availabel APIs
+## Available APIs
 - [Geocoding](https://developer.here.com/documentation/geocoder/dev_guide/topics/quick-start-geocode.html)
 - [Reverse Geocoding](https://developer.here.com/documentation/geocoder/dev_guide/topics/resource-reverse-geocode.html)
 - [Geocoding Autocomplete](https://developer.here.com/documentation/geocoder-autocomplete/dev_guide/topics/quick-start-get-suggestions.html)
